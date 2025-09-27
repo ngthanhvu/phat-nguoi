@@ -5,16 +5,27 @@ const app = express();
 const port = 5001;
 
 app.get("/api", async (req, res) => {
-  const { licensePlate } = req.query;
+  const { licensePlate, vehicleType = "car" } = req.query;
 
   if (!licensePlate) {
     return res.status(400).json({ error: "License plate is required" });
   }
 
+  // Validate vehicle type
+  if (vehicleType !== "car" && vehicleType !== "motorcycle") {
+    return res.status(400).json({ 
+      error: "Invalid vehicle type. Must be 'car' or 'motorcycle'" 
+    });
+  }
+
   try {
-    const violations = await callAPI(licensePlate);
+    const violations = await callAPI(licensePlate, vehicleType);
     if (violations) {
-      res.json({ licensePlate, violations });
+      res.json({ 
+        licensePlate, 
+        vehicleType,
+        violations 
+      });
     } else {
       res.status(404).json({ error: "No violations found" });
     }
