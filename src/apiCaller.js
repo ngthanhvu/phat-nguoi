@@ -28,6 +28,11 @@ const CONFIG = {
   },
 };
 
+function getTimeStamp() {
+  const now = new Date();
+  return `[${now.toLocaleTimeString("vi-VN", { hour12: false })}]`;
+}
+
 /**
  * Creates and configures an axios instance with cookie support
  * @returns {Object} Configured axios instance
@@ -66,7 +71,7 @@ async function getCaptcha(instance, retries = 3) {
     return captchaResult.data.text.trim();
   } catch (error) {
     if (retries > 0 && (error.code === 'ETIMEDOUT' || error.code === 'ECONNRESET' || error.code === 'ENOTFOUND')) {
-      console.log(`Captcha request failed (${error.code}), retrying... (${retries} attempts left)`);
+      console.log(`${getTimeStamp()} Captcha request failed (${error.code}), retrying... (${retries} attempts left)`);
       await new Promise(resolve => setTimeout(resolve, CONFIG.RETRY_DELAY));
       return getCaptcha(instance, retries - 1);
     }
@@ -103,7 +108,7 @@ async function postFormData(instance, plate, captcha, vehicleType = "car", retri
     });
   } catch (error) {
     if (retries > 0 && (error.code === 'ETIMEDOUT' || error.code === 'ECONNRESET' || error.code === 'ENOTFOUND')) {
-      console.log(`Form submission failed (${error.code}), retrying... (${retries} attempts left)`);
+      console.log(`${getTimeStamp()} Form submission failed (${error.code}), retrying... (${retries} attempts left)`);
       await new Promise(resolve => setTimeout(resolve, CONFIG.RETRY_DELAY));
       return postFormData(instance, plate, captcha, vehicleType, retries - 1);
     }
@@ -126,7 +131,7 @@ async function getViolationResults(instance, plate, vehicleType = "car", retries
     return await instance.get(`${CONFIG.RESULTS_URL}?&LoaiXe=${vehicleCode}&BienKiemSoat=${plate}`);
   } catch (error) {
     if (retries > 0 && (error.code === 'ETIMEDOUT' || error.code === 'ECONNRESET' || error.code === 'ENOTFOUND')) {
-      console.log(`Results request failed (${error.code}), retrying... (${retries} attempts left)`);
+      console.log(`${getTimeStamp()} Results request failed (${error.code}), retrying... (${retries} attempts left)`);
       await new Promise(resolve => setTimeout(resolve, CONFIG.RETRY_DELAY));
       return getViolationResults(instance, plate, vehicleType, retries - 1);
     }
@@ -143,7 +148,7 @@ async function getViolationResults(instance, plate, vehicleType = "car", retries
  */
 export async function callAPI(plate, vehicleType = "car", retries = CONFIG.MAX_RETRIES) {
   try {
-    console.log(`Fetching traffic violations for ${vehicleType} plate:`, plate);
+    console.log(`${getTimeStamp()} Fetching traffic violations for ${vehicleType} plate:`, plate);
     const instance = createAxiosInstance();
     const captcha = await getCaptcha(instance);
     // console.log(`Using captcha: ${captcha}`);
@@ -154,7 +159,7 @@ export async function callAPI(plate, vehicleType = "car", retries = CONFIG.MAX_R
     if (response.data === 404) {
       if (retries > 0) {
         console.log(
-          `Captcha verification failed ${captcha}. Retrying... (${
+          `${getTimeStamp()} Captcha verification failed ${captcha}. Retrying... (${
             CONFIG.MAX_RETRIES - retries + 1
           }/${CONFIG.MAX_RETRIES})`
         );
@@ -174,7 +179,7 @@ export async function callAPI(plate, vehicleType = "car", retries = CONFIG.MAX_R
   } catch (error) {
     // Handle network errors with retry
     if (retries > 0 && (error.code === 'ETIMEDOUT' || error.code === 'ECONNRESET' || error.code === 'ENOTFOUND')) {
-      console.log(`Network error (${error.code}) for ${vehicleType} plate ${plate}, retrying... (${retries} attempts left)`);
+      console.log(`${getTimeStamp()} Network error (${error.code}) for ${vehicleType} plate ${plate}, retrying... (${retries} attempts left)`);
       await new Promise(resolve => setTimeout(resolve, CONFIG.RETRY_DELAY));
       return callAPI(plate, vehicleType, retries - 1);
     }

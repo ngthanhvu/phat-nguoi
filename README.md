@@ -31,7 +31,7 @@ docker build -t phat-nguoi .
 ```
 3. Chạy container từ image vừa build
 ```sh
-docker run -d -p 3000:3000 --name my-node-container phat-nguoi
+docker run -d -p 5001:5001 --name phat-nguoi-container phat-nguoi
 ```
 ## Sử dụng
 ### Chạy server REST API
@@ -41,11 +41,11 @@ npm run start
 ```
 2. Gửi yêu cầu GET đến endpoint `/api` với tham số `licensePlate`:
 ```sh
-curl "http://localhost:3000/api?licensePlate=30H47465"
+curl "http://localhost:5001/api?licensePlate=30H47465"
 ```
 3. Gửi yêu cầu cho các loại xe `xe máy` hoặc `xe điện` kèm tham số `vehicleType`
 ```sh
-curl "http://localhost:3000/api?licensePlate=30H47465&vehicleType=motorcycle"
+curl "http://localhost:5001/api?licensePlate=30H47465&vehicleType=motorcycle"
 ```
 ## Cấu trúc dự án
 - `src/apiCaller.js`: Chứa logic chính để tương tác với API tra cứu vi phạm giao thông.
