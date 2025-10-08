@@ -1,0 +1,41 @@
+{
+  "expo": {
+    "name": "Tra cứu phạt nguội",
+    "slug": "tra-cuu-phat-nguoi",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/logo_phat_nguoi.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#22c55e"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "icon": "./assets/logo_phat_nguoi.png"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/logo_phat_nguoi.png",
+        "backgroundColor": "#ffffff"
+      },
+      "edgeToEdgeEnabled": true,
+      "package": "com.ngthanhvu.tracuuphatnguoi"
+    },
+    "web": {
+      "favicon": "./assets/logo_phat_nguoi.png"
+    },
+    "scheme": "datn",
+    "extra": {
+      "eas": {
+        "projectId": "89be1196-52cb-4056-a7d3-26368a924d32"
+      }
+    },
+    "plugins": [
+      "expo-font",
+      "expo-router"
+    ]
+  }
+}
